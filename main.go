@@ -9,6 +9,7 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/mdp/qrterminal"
+	"github.com/whatsapp-leles/db"
 	"github.com/whatsapp-leles/utils"
 	"go.mau.fi/whatsmeow"
 	"go.mau.fi/whatsmeow/store/sqlstore"
@@ -17,6 +18,7 @@ import (
 )
 
 func main() {
+	db.CreateDB()
 	dbLog := waLog.Stdout("Database", "DEBUG", true)
 	dsn := "file:whatsapp.db?_foreign_keys=on"
 	container, err := sqlstore.New("sqlite3", dsn, dbLog)
