@@ -2,6 +2,7 @@ package utils
 
 import (
 	"context"
+	"regexp"
 	"strings"
 
 	"go.mau.fi/whatsmeow"
@@ -24,4 +25,9 @@ func SendMessage(message string, client *whatsmeow.Client, v *events.Message) {
 	client.SendMessage(context.Background(), v.Info.Chat, &waProto.Message{
 		Conversation: proto.String(message),
 	})
+}
+
+func RemoveBotId(message string) string {
+	re := regexp.MustCompile(`@\S+`)
+	return re.ReplaceAllString(message, "")
 }

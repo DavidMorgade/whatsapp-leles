@@ -10,6 +10,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/mdp/qrterminal"
 	"github.com/whatsapp-leles/db"
+	"github.com/whatsapp-leles/models"
 	"github.com/whatsapp-leles/utils"
 	"go.mau.fi/whatsmeow"
 	"go.mau.fi/whatsmeow/store/sqlstore"
@@ -63,19 +64,38 @@ func main() {
 }
 
 func GetEventHandler(client *whatsmeow.Client) func(interface{}) {
+
 	return func(evt interface{}) {
+
 		switch v := evt.(type) {
 		case *events.Message:
+
 			message := v.Message.GetExtendedTextMessage()
 			recievedBy := v.Info.PushName
 			if message == nil {
 				return
 			}
 
+			messageModel := models.Message{
+				UserID:  1,
+				Message: message.GetText(),
+			}
+
 			// Check if the message mentions the bot
 			botID := client.Store.ID.User
 			if utils.CheckBotMention(message, botID) {
-				fmt.Printf("Received mention in group: %s\n", message.GetText())
+				if utils.RemoveBotId(message.GetText()) == " muestra" {
+					messages, err := messageModel.GetAllMessages()
+					if err != nil {
+						fmt.Println(err)
+					}
+					for _, message := range messages {
+						utils.SendMessage("Mensaje guardado de: "+string(message.UserID), client, v)
+						utils.SendMessage("Contenido del mensaje: "+message.Message, client, v)
+					}
+				}
+				messageModel.SaveMessage()
+				fmt.Printf("Received mention in group: %s\n", utils.RemoveBotId(message.GetText()))
 				fmt.Printf("Recieved by: %s\n", recievedBy)
 
 				utils.SendMessage("Soy un bot y estoy funcionando "+recievedBy, client, v)
