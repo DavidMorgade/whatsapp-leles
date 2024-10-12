@@ -95,17 +95,46 @@ func GetEventHandler(client *whatsmeow.Client) func(interface{}) {
 					utils.SendHelpCommands(client, v)
 					break
 				}
+
 				if strings.ToLower(messageContent) == " /tiempo" {
 					weather, err := api.GetWeather()
 					if err != nil {
 						fmt.Println(err)
+						utils.SendMessage(err.Error(), client, v)
+						break
 					}
 
 					utils.SendMessage("Ciudad: "+weather.Name, client, v)
 					utils.SendMessage("Temperatura: "+fmt.Sprintf("%.2f", utils.KelvinToCelsius(weather.Main.Temp)), client, v)
 					utils.SendMessage("Descripción del clima: "+weather.Weather[0].Description, client, v)
 					utils.SendMessage("Velocidad del viento: "+fmt.Sprintf("%.2f", weather.Wind.Speed), client, v)
+					break
+				}
 
+				if strings.HasPrefix(strings.ToLower(messageContent), " /tiempo") {
+					fmt.Println("Message content: ", messageContent)
+					city := utils.GetCityFromMessage(messageContent)
+					fmt.Println("City: ", city)
+
+					weather, err := api.GetWeatherByCity(city)
+
+					if weather == nil {
+						utils.SendMessage("No se encontró la ciudad", client, v)
+						break
+					}
+
+					fmt.Println("Weather: ", weather)
+
+					if err != nil {
+						fmt.Println(err)
+						utils.SendMessage(err.Error(), client, v)
+						break
+					}
+
+					utils.SendMessage("Ciudad: "+weather.Name, client, v)
+					utils.SendMessage("Temperatura: "+fmt.Sprintf("%.2f", utils.KelvinToCelsius(weather.Main.Temp)), client, v)
+					utils.SendMessage("Descripción del clima: "+weather.Weather[0].Description, client, v)
+					utils.SendMessage("Velocidad del viento: "+fmt.Sprintf("%.2f", weather.Wind.Speed), client, v)
 					break
 				}
 				if strings.ToLower(messageContent) == " /muestra" {
