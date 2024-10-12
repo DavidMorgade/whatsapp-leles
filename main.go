@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -71,6 +72,7 @@ func GetEventHandler(client *whatsmeow.Client) func(interface{}) {
 		case *events.Message:
 
 			message := v.Message.GetExtendedTextMessage()
+			messageContent := utils.RemoveBotId(message.GetText())
 			recievedBy := v.Info.PushName
 			if message == nil {
 				return
@@ -78,13 +80,21 @@ func GetEventHandler(client *whatsmeow.Client) func(interface{}) {
 
 			messageModel := models.Message{
 				UserID:  1,
-				Message: message.GetText(),
+				Message: messageContent,
 			}
 
 			// Check if the message mentions the bot
 			botID := client.Store.ID.User
 			if utils.CheckBotMention(message, botID) {
-				if utils.RemoveBotId(message.GetText()) == " muestra" {
+				if strings.ReplaceAll(messageContent, " ", "") == "" {
+					utils.DefaultHelpMessage(client, v)
+					break
+				}
+				if strings.ToLower(messageContent) == " /ayuda" {
+					utils.SendHelpCommands(client, v)
+					break
+				}
+				if strings.ToLower(messageContent) == " /muestra" {
 					messages, err := messageModel.GetAllMessages()
 					if err != nil {
 						fmt.Println(err)
@@ -93,7 +103,9 @@ func GetEventHandler(client *whatsmeow.Client) func(interface{}) {
 						utils.SendMessage("Mensaje guardado de: "+string(message.UserID), client, v)
 						utils.SendMessage("Contenido del mensaje: "+message.Message, client, v)
 					}
+					break
 				}
+
 				messageModel.SaveMessage()
 				fmt.Printf("Received mention in group: %s\n", utils.RemoveBotId(message.GetText()))
 				fmt.Printf("Recieved by: %s\n", recievedBy)
