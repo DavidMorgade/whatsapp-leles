@@ -1,20 +1,41 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
+	"os"
+
+	"github.com/joho/godotenv"
+	"github.com/whatsapp-leles/utils"
 )
 
-var apiURL = "https://api.weatherapi.com/v1/current.json?key"
+var apiURL = "https://api.openweathermap.org/data/2.5/weather?lang=es&lat=15.0286&lon=120.6898&appid="
 
 type Weather struct {
-	Location struct {
-		Name string `json:"name"`
-	} `json:"location"`
-	Current struct {
-		TempC float64 `json:"temp_c"`
-	} `json:"current"`
+	Name string `json:"name"`
+	Main struct {
+		Temp float64 `json:"temp"`
+	} `json:"main"`
+	Weather []struct {
+		Description string `json:"description"`
+	} `json:"weather"`
+	Wind struct {
+		Speed float64 `json:"speed"`
+	} `json:"wind"`
+	Clouds struct {
+		All int `json:"all"`
+	} `json:"clouds"`
+}
+
+func init() {
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Println("Error loading .env file")
+	}
+	apiKey := os.Getenv("API_KEY")
+	apiURL += apiKey
 }
 
 func GetWeather() (*Weather, error) {
@@ -27,7 +48,18 @@ func GetWeather() (*Weather, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(string(body))
 
-	return nil, nil
+	var weather Weather
+	err = json.Unmarshal(body, &weather)
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Printf("City: %s\n", weather.Name)
+	fmt.Printf("Temperature: %.2f\n", utils.KelvinToCelsius(weather.Main.Temp))
+	fmt.Printf("Weather Description: %s\n", weather.Weather[0].Description)
+	fmt.Printf("Wind Speed: %.2f\n", weather.Wind.Speed)
+	fmt.Printf("Cloud Percentage: %d\n", weather.Clouds.All)
+
+	return &weather, nil
 }

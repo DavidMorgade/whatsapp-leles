@@ -10,6 +10,7 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/mdp/qrterminal"
+	"github.com/whatsapp-leles/api"
 	"github.com/whatsapp-leles/db"
 	"github.com/whatsapp-leles/models"
 	"github.com/whatsapp-leles/utils"
@@ -92,6 +93,19 @@ func GetEventHandler(client *whatsmeow.Client) func(interface{}) {
 				}
 				if strings.ToLower(messageContent) == " /ayuda" {
 					utils.SendHelpCommands(client, v)
+					break
+				}
+				if strings.ToLower(messageContent) == " /tiempo" {
+					weather, err := api.GetWeather()
+					if err != nil {
+						fmt.Println(err)
+					}
+
+					utils.SendMessage("Ciudad: "+weather.Name, client, v)
+					utils.SendMessage("Temperatura: "+fmt.Sprintf("%.2f", utils.KelvinToCelsius(weather.Main.Temp)), client, v)
+					utils.SendMessage("Descripción del clima: "+weather.Weather[0].Description, client, v)
+					utils.SendMessage("Velocidad del viento: "+fmt.Sprintf("%.2f", weather.Wind.Speed), client, v)
+
 					break
 				}
 				if strings.ToLower(messageContent) == " /muestra" {
