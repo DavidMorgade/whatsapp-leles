@@ -6,7 +6,7 @@ import (
 )
 
 func DefaultHelpMessage(client *whatsmeow.Client, v *events.Message) {
-	message := "No me has enviado ningún comando válido. Para ver la lista de comandos disponibles, mencioname y escribe /help."
+	message := "No me has enviado ningún comando válido. Para ver la lista de comandos disponibles, mencioname y escribe /ayuda."
 	SendMessage(message, client, v)
 
 }

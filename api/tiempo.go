@@ -11,14 +11,16 @@ import (
 	"strings"
 
 	"github.com/joho/godotenv"
-	"github.com/whatsapp-leles/utils"
 )
 
-var apiURL = "https://api.openweathermap.org/data/2.5/weather?lang=es&lat=15.0286&lon=120.6898&appid="
+var apiURL = "https://api.openweathermap.org/data/2.5/weather?lang=es&lat=36.4759&lon=-6.1982&appid="
 
 type Weather struct {
 	Cod  CodType `json:"cod"`
 	Name string  `json:"name"`
+	Sys  struct {
+		Country string `json:"country"`
+	} `json:"sys"`
 	Main struct {
 		Temp float64 `json:"temp"`
 	} `json:"main"`
@@ -32,6 +34,7 @@ type Weather struct {
 		All int `json:"all"`
 	} `json:"clouds"`
 }
+
 type CodType struct {
 	Value int
 }
@@ -67,7 +70,6 @@ func init() {
 
 func GetWeather() (*Weather, error) {
 	resp, err := http.Get(apiURL)
-
 	if err != nil {
 		return nil, err
 	}
@@ -86,18 +88,12 @@ func GetWeather() (*Weather, error) {
 		return nil, err
 	}
 
-	fmt.Printf("City: %s\n", weather.Name)
-	fmt.Printf("Temperature: %.2f\n", utils.KelvinToCelsius(weather.Main.Temp))
-	fmt.Printf("Weather Description: %s\n", weather.Weather[0].Description)
-	fmt.Printf("Wind Speed: %.2f\n", weather.Wind.Speed)
-	fmt.Printf("Cloud Percentage: %d\n", weather.Clouds.All)
-
 	return &weather, nil
 }
 
 func GetWeatherByCity(city string) (*Weather, error) {
 	if len(strings.ReplaceAll(city, " ", "")) == 0 {
-		city = "san fernando"
+		city = "san fernando,es"
 	}
 	apiURL := "https://api.openweathermap.org/data/2.5/weather?lang=es&q=" + city + "&appid="
 	apiKey := os.Getenv("API_KEY")
@@ -111,6 +107,7 @@ func GetWeatherByCity(city string) (*Weather, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	var weather Weather
 	err = json.Unmarshal(body, &weather)
 	if weather.Cod.Value == 404 {
@@ -119,12 +116,6 @@ func GetWeatherByCity(city string) (*Weather, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	fmt.Printf("City: %s\n", weather.Name)
-	fmt.Printf("Temperature: %.2f\n", utils.KelvinToCelsius(weather.Main.Temp))
-	fmt.Printf("Weather Description: %s\n", weather.Weather[0].Description)
-	fmt.Printf("Wind Speed: %.2f\n", weather.Wind.Speed)
-	fmt.Printf("Cloud Percentage: %d\n", weather.Clouds.All)
 
 	return &weather, nil
 }

@@ -1,0 +1,402 @@
+package utils
+
+func countryCodeToFullNameOnSpanish(cc string) string {
+	switch cc {
+	case "AF":
+		return "Afganistán"
+	case "AL":
+		return "Albania"
+	case "DZ":
+		return "Argelia"
+	case "AS":
+		return "Samoa Americana"
+	case "AD":
+		return "Andorra"
+	case "AO":
+		return "Angola"
+	case "AI":
+		return "Anguila"
+	case "AQ":
+		return "Antártida"
+	case "AG":
+		return "Antigua y Barbuda"
+	case "AR":
+		return "Argentina"
+	case "AM":
+		return "Armenia"
+	case "AW":
+		return "Aruba"
+	case "AU":
+		return "Australia"
+	case "AT":
+		return "Austria"
+	case "AZ":
+		return "Azerbaiyán"
+	case "BS":
+		return "Bahamas"
+	case "BH":
+		return "Baréin"
+	case "BD":
+		return "Bangladés"
+	case "BB":
+		return "Barbados"
+	case "BY":
+		return "Bielorrusia"
+	case "BE":
+		return "Bélgica"
+	case "BZ":
+		return "Belice"
+	case "BJ":
+		return "Benín"
+	case "BM":
+		return "Bermudas"
+	case "BT":
+		return "Bután"
+	case "BO":
+		return "Bolivia"
+	case "BA":
+		return "Bosnia y Herzegovina"
+	case "BW":
+		return "Botsuana"
+	case "BR":
+		return "Brasil"
+	case "BN":
+		return "Brunéi"
+	case "BG":
+		return "Bulgaria"
+	case "BF":
+		return "Burkina Faso"
+	case "BI":
+		return "Burundi"
+	case "CV":
+		return "Cabo Verde"
+	case "KH":
+		return "Camboya"
+	case "CM":
+		return "Camerún"
+	case "CA":
+		return "Canadá"
+	case "KY":
+		return "Islas Caimán"
+	case "CF":
+		return "República Centroafricana"
+	case "TD":
+		return "Chad"
+	case "CL":
+		return "Chile"
+	case "CN":
+		return "China"
+	case "CO":
+		return "Colombia"
+	case "KM":
+		return "Comoras"
+	case "CG":
+		return "Congo"
+	case "CD":
+		return "República Democrática del Congo"
+	case "CR":
+		return "Costa Rica"
+	case "CI":
+		return "Costa de Marfil"
+	case "HR":
+		return "Croacia"
+	case "CU":
+		return "Cuba"
+	case "CY":
+		return "Chipre"
+	case "CZ":
+		return "Chequia"
+	case "DK":
+		return "Dinamarca"
+	case "DJ":
+		return "Yibuti"
+	case "DM":
+		return "Dominica"
+	case "DO":
+		return "República Dominicana"
+	case "EC":
+		return "Ecuador"
+	case "EG":
+		return "Egipto"
+	case "SV":
+		return "El Salvador"
+	case "GQ":
+		return "Guinea Ecuatorial"
+	case "ER":
+		return "Eritrea"
+	case "EE":
+		return "Estonia"
+	case "SZ":
+		return "Esuatini"
+	case "ET":
+		return "Etiopía"
+	case "FJ":
+		return "Fiyi"
+	case "FI":
+		return "Finlandia"
+	case "FR":
+		return "Francia"
+	case "GA":
+		return "Gabón"
+	case "GM":
+		return "Gambia"
+	case "GE":
+		return "Georgia"
+	case "DE":
+		return "Alemania"
+	case "GH":
+		return "Ghana"
+	case "GR":
+		return "Grecia"
+	case "GD":
+		return "Granada"
+	case "GT":
+		return "Guatemala"
+	case "GN":
+		return "Guinea"
+	case "GW":
+		return "Guinea-Bisáu"
+	case "GY":
+		return "Guyana"
+	case "HT":
+		return "Haití"
+	case "HN":
+		return "Honduras"
+	case "HU":
+		return "Hungría"
+	case "IS":
+		return "Islandia"
+	case "IN":
+		return "India"
+	case "ID":
+		return "Indonesia"
+	case "IR":
+		return "Irán"
+	case "IQ":
+		return "Irak"
+	case "IE":
+		return "Irlanda"
+	case "IL":
+		return "Israel"
+	case "IT":
+		return "Italia"
+	case "JM":
+		return "Jamaica"
+	case "JP":
+		return "Japón"
+	case "JO":
+		return "Jordania"
+	case "KZ":
+		return "Kazajistán"
+	case "KE":
+		return "Kenia"
+	case "KI":
+		return "Kiribati"
+	case "KP":
+		return "Corea del Norte"
+	case "KR":
+		return "Corea del Sur"
+	case "KW":
+		return "Kuwait"
+	case "KG":
+		return "Kirguistán"
+	case "LA":
+		return "Laos"
+	case "LV":
+		return "Letonia"
+	case "LB":
+		return "Líbano"
+	case "LS":
+		return "Lesoto"
+	case "LR":
+		return "Liberia"
+	case "LY":
+		return "Libia"
+	case "LI":
+		return "Liechtenstein"
+	case "LT":
+		return "Lituania"
+	case "LU":
+		return "Luxemburgo"
+	case "MG":
+		return "Madagascar"
+	case "MW":
+		return "Malaui"
+	case "MY":
+		return "Malasia"
+	case "MV":
+		return "Maldivas"
+	case "ML":
+		return "Malí"
+	case "MT":
+		return "Malta"
+	case "MH":
+		return "Islas Marshall"
+	case "MR":
+		return "Mauritania"
+	case "MU":
+		return "Mauricio"
+	case "MX":
+		return "México"
+	case "FM":
+		return "Micronesia"
+	case "MD":
+		return "Moldavia"
+	case "MC":
+		return "Mónaco"
+	case "MN":
+		return "Mongolia"
+	case "ME":
+		return "Montenegro"
+	case "MA":
+		return "Marruecos"
+	case "MZ":
+		return "Mozambique"
+	case "MM":
+		return "Birmania"
+	case "NA":
+		return "Namibia"
+	case "NR":
+		return "Nauru"
+	case "NP":
+		return "Nepal"
+	case "NL":
+		return "Países Bajos"
+	case "NZ":
+		return "Nueva Zelanda"
+	case "NI":
+		return "Nicaragua"
+	case "NE":
+		return "Níger"
+	case "NG":
+		return "Nigeria"
+	case "NO":
+		return "Noruega"
+	case "OM":
+		return "Omán"
+	case "PK":
+		return "Pakistán"
+	case "PW":
+		return "Palaos"
+	case "PA":
+		return "Panamá"
+	case "PG":
+		return "Papúa Nueva Guinea"
+	case "PY":
+		return "Paraguay"
+	case "PE":
+		return "Perú"
+	case "PH":
+		return "Filipinas"
+	case "PL":
+		return "Polonia"
+	case "PT":
+		return "Portugal"
+	case "QA":
+		return "Catar"
+	case "RO":
+		return "Rumania"
+	case "RU":
+		return "Rusia"
+	case "RW":
+		return "Ruanda"
+	case "WS":
+		return "Samoa"
+	case "SM":
+		return "San Marino"
+	case "ST":
+		return "Santo Tomé y Príncipe"
+	case "SA":
+		return "Arabia Saudita"
+	case "SN":
+		return "Senegal"
+	case "RS":
+		return "Serbia"
+	case "SC":
+		return "Seychelles"
+	case "SL":
+		return "Sierra Leona"
+	case "SG":
+		return "Singapur"
+	case "SK":
+		return "Eslovaquia"
+	case "SI":
+		return "Eslovenia"
+	case "SB":
+		return "Islas Salomón"
+	case "SO":
+		return "Somalia"
+	case "ZA":
+		return "Sudáfrica"
+	case "SS":
+		return "Sudán del Sur"
+	case "ES":
+		return "España"
+	case "LK":
+		return "Sri Lanka"
+	case "SD":
+		return "Sudán"
+	case "SR":
+		return "Surinam"
+	case "SE":
+		return "Suecia"
+	case "CH":
+		return "Suiza"
+	case "SY":
+		return "Siria"
+	case "TW":
+		return "Taiwán"
+	case "TJ":
+		return "Tayikistán"
+	case "TZ":
+		return "Tanzania"
+	case "TH":
+		return "Tailandia"
+	case "TL":
+		return "Timor Oriental"
+	case "TG":
+		return "Togo"
+	case "TO":
+		return "Tonga"
+	case "TT":
+		return "Trinidad y Tobago"
+	case "TN":
+		return "Túnez"
+	case "TR":
+		return "Turquía"
+	case "TM":
+		return "Turkmenistán"
+	case "TV":
+		return "Tuvalu"
+	case "UG":
+		return "Uganda"
+	case "UA":
+		return "Ucrania"
+	case "AE":
+		return "Emiratos Árabes Unidos"
+	case "GB":
+		return "Reino Unido"
+	case "US":
+		return "Estados Unidos"
+	case "UY":
+		return "Uruguay"
+	case "UZ":
+		return "Uzbekistán"
+	case "VU":
+		return "Vanuatu"
+	case "VA":
+		return "Ciudad del Vaticano"
+	case "VE":
+		return "Venezuela"
+	case "VN":
+		return "Vietnam"
+	case "YE":
+		return "Yemen"
+	case "ZM":
+		return "Zambia"
+	case "ZW":
+		return "Zimbabue"
+	default:
+		return "Código de país no reconocido"
+	}
+}

@@ -104,17 +104,13 @@ func GetEventHandler(client *whatsmeow.Client) func(interface{}) {
 						break
 					}
 
-					utils.SendMessage("Ciudad: "+weather.Name, client, v)
-					utils.SendMessage("Temperatura: "+fmt.Sprintf("%.2f", utils.KelvinToCelsius(weather.Main.Temp)), client, v)
-					utils.SendMessage("Descripción del clima: "+weather.Weather[0].Description, client, v)
-					utils.SendMessage("Velocidad del viento: "+fmt.Sprintf("%.2f", weather.Wind.Speed), client, v)
+					utils.SendWeatherMessage(*weather, client, v)
+
 					break
 				}
 
 				if strings.HasPrefix(strings.ToLower(messageContent), " /tiempo") {
-					fmt.Println("Message content: ", messageContent)
 					city := utils.GetCityFromMessage(messageContent)
-					fmt.Println("City: ", city)
 
 					weather, err := api.GetWeatherByCity(city)
 
@@ -130,11 +126,7 @@ func GetEventHandler(client *whatsmeow.Client) func(interface{}) {
 						utils.SendMessage(err.Error(), client, v)
 						break
 					}
-
-					utils.SendMessage("Ciudad: "+weather.Name, client, v)
-					utils.SendMessage("Temperatura: "+fmt.Sprintf("%.2f", utils.KelvinToCelsius(weather.Main.Temp)), client, v)
-					utils.SendMessage("Descripción del clima: "+weather.Weather[0].Description, client, v)
-					utils.SendMessage("Velocidad del viento: "+fmt.Sprintf("%.2f", weather.Wind.Speed), client, v)
+					utils.SendWeatherMessage(*weather, client, v)
 					break
 				}
 				if strings.ToLower(messageContent) == " /muestra" {
