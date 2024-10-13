@@ -5,6 +5,9 @@ import (
 	"log"
 
 	_ "github.com/mattn/go-sqlite3"
+	"go.mau.fi/whatsmeow/store"
+	"go.mau.fi/whatsmeow/store/sqlstore"
+	waLog "go.mau.fi/whatsmeow/util/log"
 )
 
 func CreateDB() {
@@ -18,7 +21,7 @@ func CreateDB() {
 	// Create the users table
 	createUsersTable := `
 	CREATE TABLE IF NOT EXISTS users (
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		id STRING PRIMARY KEY NOT NULL,
 		username TEXT NOT NULL UNIQUE
 	);`
 	_, err = db.Exec(createUsersTable)
@@ -41,4 +44,23 @@ func CreateDB() {
 	}
 
 	log.Println("Database and tables created successfully")
+}
+
+func CreateWaDB() (deviceStore *store.Device, clientLog waLog.Logger, err error) {
+
+	dbLog := waLog.Stdout("Database", "DEBUG", true)
+	dsn := "file:whatsapp.db?_foreign_keys=on"
+	container, err := sqlstore.New("sqlite3", dsn, dbLog)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	deviceStore, err = container.GetFirstDevice()
+	if err != nil {
+		return nil, nil, err
+	}
+
+	clientLog = waLog.Stdout("Client", "INFO", true)
+
+	return deviceStore, clientLog, nil
 }

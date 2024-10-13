@@ -4,7 +4,7 @@ import "database/sql"
 
 type Message struct {
 	ID        int    `json:"id"`
-	UserID    int    `json:"user_id"`
+	UserID    string `json:"user_id"`
 	Message   string `json:"message"`
 	Timestamp string `json:"timestamp"`
 }
