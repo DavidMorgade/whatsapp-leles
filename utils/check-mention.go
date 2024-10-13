@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/whatsapp-leles/api"
@@ -24,6 +25,10 @@ func CheckMention(client *whatsmeow.Client, v any) {
 		message := v.Message.GetExtendedTextMessage()
 
 		messageContent := RemoveBotId(message.GetText())
+
+		// Use a regular expression to remove the command including the /
+		re := regexp.MustCompile(`(?i)/\S*`)
+		messageWithoutCommand := re.ReplaceAllString(messageContent, "")
 
 		botID := client.Store.ID.User
 		messageModel := models.Message{
@@ -57,15 +62,16 @@ func CheckMention(client *whatsmeow.Client, v any) {
 			}
 			// Usa inteligencia artificial para generar una imagen a partir de un texto
 			if strings.HasPrefix(strings.ToLower(messageContent), " /generar") {
-				// SendMessage("Generando imagen de "+messageContent, client, v)
-				// imgURL, err := api.GenerateImageFromText(messageContent)
-				// if err != nil {
-				// 	fmt.Println(err)
-				// }
-				imgURL := "public/images/generarperroverde.png"
-				err := SendImage(messageContent, imgURL, client, v)
+				SendMessage("Generando imagen de"+messageWithoutCommand, client, v)
+				imgURL, err := api.GenerateImageFromText(messageWithoutCommand)
 				if err != nil {
-					fmt.Println(err)
+					SendMessage("No se pudo generar la imagen debido a la cantidad de peticiones, esperate un poquito maquinon", client, v)
+					break
+				}
+				err = SendImage(messageWithoutCommand, imgURL, client, v)
+				if err != nil {
+					SendMessage(err.Error(), client, v)
+					break
 				}
 				break
 			}
