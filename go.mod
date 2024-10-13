@@ -14,6 +14,7 @@ require (
 	github.com/mattn/go-isatty v0.0.19 // indirect
 	github.com/mdp/qrterminal v1.0.1 // indirect
 	github.com/rs/zerolog v1.33.0 // indirect
+	github.com/sashabaranov/go-openai v1.32.0 // indirect
 	go.mau.fi/libsignal v0.1.1 // indirect
 	go.mau.fi/util v0.8.0 // indirect
 	go.mau.fi/whatsmeow v0.0.0-20241009112614-70d73b690a8d // indirect

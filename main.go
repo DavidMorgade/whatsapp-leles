@@ -1,10 +1,7 @@
 package main
 
 import (
-	"context"
-	"fmt"
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/mdp/qrterminal"
 	"github.com/whatsapp-leles/db"
 	"github.com/whatsapp-leles/utils"
 	"go.mau.fi/whatsmeow"
@@ -19,24 +16,10 @@ func main() {
 	client := whatsmeow.NewClient(deviceStore, clientLog)
 	client.AddEventHandler(GetEventHandler(client))
 
-	if client.Store.ID == nil {
-		qrChan, _ := client.GetQRChannel(context.Background())
-		err = client.Connect()
-		if err != nil {
-			panic(err)
-		}
-		for evt := range qrChan {
-			if evt.Event == "code" {
-				qrterminal.GenerateHalfBlock(evt.Code, qrterminal.L, os.Stdout)
-			} else {
-				fmt.Println("Login event:", evt.Event)
-			}
-		}
-	} else {
-		err = client.Connect()
-		if err != nil {
-			panic(err)
-		}
+	err = utils.CheckWaLogin(client)
+
+	if err != nil {
+		panic(err)
 	}
 
 	c := make(chan os.Signal, 1)

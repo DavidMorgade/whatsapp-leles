@@ -14,6 +14,11 @@ func CheckMention(client *whatsmeow.Client, v any) {
 	switch v := v.(type) {
 	case *events.Message:
 
+		if !v.Info.IsGroup {
+			SendMessage("No se puede utilizar este bot por mensaje privado", client, v)
+			return
+		}
+
 		recievedBy := v.Info.PushName
 
 		message := v.Message.GetExtendedTextMessage()
@@ -25,16 +30,19 @@ func CheckMention(client *whatsmeow.Client, v any) {
 			UserID:  recievedBy,
 			Message: messageContent,
 		}
+		// Si el mensaje contiene una mención al bot vacía, se muestra el mensaje de ayuda
 		if CheckBotMention(message, botID) {
 			if strings.ReplaceAll(messageContent, " ", "") == "" {
 				DefaultHelpMessage(client, v)
 				break
 			}
+			// Muestra los comandos disponibles
 			if strings.ToLower(messageContent) == " /ayuda" {
 				SendHelpCommands(client, v)
 				break
 			}
 
+			// Usa la API de OpenWeatherMap para obtener el tiempo en una ciudad
 			if strings.ToLower(messageContent) == " /tiempo" {
 				weather, err := api.GetWeather()
 				if err != nil {
@@ -45,6 +53,15 @@ func CheckMention(client *whatsmeow.Client, v any) {
 
 				SendWeatherMessage(*weather, client, v)
 
+				break
+			}
+			// Usa inteligencia artificial para generar una imagen a partir de un texto
+			if strings.HasPrefix(strings.ToLower(messageContent), " /generar") {
+				imgURL, err := api.GenerateImageFromText(messageContent)
+				if err != nil {
+					fmt.Println(err)
+				}
+				SendMessage(imgURL, client, v)
 				break
 			}
 
