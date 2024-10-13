@@ -57,11 +57,16 @@ func CheckMention(client *whatsmeow.Client, v any) {
 			}
 			// Usa inteligencia artificial para generar una imagen a partir de un texto
 			if strings.HasPrefix(strings.ToLower(messageContent), " /generar") {
-				imgURL, err := api.GenerateImageFromText(messageContent)
+				// SendMessage("Generando imagen de "+messageContent, client, v)
+				// imgURL, err := api.GenerateImageFromText(messageContent)
+				// if err != nil {
+				// 	fmt.Println(err)
+				// }
+				imgURL := "public/images/generarperroverde.png"
+				err := SendImage(messageContent, imgURL, client, v)
 				if err != nil {
 					fmt.Println(err)
 				}
-				SendMessage(imgURL, client, v)
 				break
 			}
 
