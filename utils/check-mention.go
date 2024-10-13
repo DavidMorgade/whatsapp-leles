@@ -60,6 +60,18 @@ func CheckMention(client *whatsmeow.Client, v any) {
 
 				break
 			}
+			if strings.HasPrefix(strings.ToLower(messageContent), " /generarmeme") {
+				SendMessage("Generando meme de"+messageWithoutCommand, client, v)
+				imgURL, err := api.GenerateImageFromText("Genera un meme del siguiente texto" + messageWithoutCommand)
+				if err != nil {
+					SendMessage("No se pudo generar el meme debido a la cantidad de peticiones, esperate un poquito maquinon", client, v)
+				}
+				err = SendImage("Meme de:"+messageWithoutCommand, imgURL, client, v)
+				if err != nil {
+					SendMessage(err.Error(), client, v)
+				}
+				break
+			}
 			// Usa inteligencia artificial para generar una imagen a partir de un texto
 			if strings.HasPrefix(strings.ToLower(messageContent), " /generar") {
 				SendMessage("Generando imagen de"+messageWithoutCommand, client, v)

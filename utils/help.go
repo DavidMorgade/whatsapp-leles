@@ -16,8 +16,8 @@ func SendHelpCommands(client *whatsmeow.Client, v *events.Message) {
 		"/ayuda - Muestra la lista de comandos disponibles\n" +
 		"/tiempo - Muestra el tiempo actual en San Fernando\n" +
 		"/tiempo [ciudad] - Muestra el tiempo actual en la ciudad especificada\n" +
-		"/muestra - Muestra los mensajes guardados\n" +
-		"/guardar - Guarda un mensaje\n"
+		"/generar [texto] - Genera una imagen de IA del promp especificado\n" +
+		"/generarmeme [texto] - Genera un meme con el texto especificado\n"
 
 	SendMessage(message, client, v)
 }
