@@ -13,11 +13,12 @@ func DefaultHelpMessage(client *whatsmeow.Client, v *events.Message) {
 
 func SendHelpCommands(client *whatsmeow.Client, v *events.Message) {
 	message := "Lista de comandos disponibles:\n\n" +
-		"/ayuda - Muestra la lista de comandos disponibles\n" +
-		"/tiempo - Muestra el tiempo actual en San Fernando\n" +
-		"/tiempo [ciudad] - Muestra el tiempo actual en la ciudad especificada\n" +
-		"/generar [texto] - Genera una imagen de IA del promp especificado\n" +
-		"/generarmeme [texto] - Genera un meme con el texto especificado\n"
+		"/ayuda - Muestra la lista de comandos disponibles\n\n" +
+		"/tiempo - Muestra el tiempo actual en San Fernando\n\n" +
+		"/tiempo [ciudad] - Muestra el tiempo actual en la ciudad especificada\n\n" +
+		"/imagen [texto] - Genera una imagen de IA del promp especificado\n\n" +
+		"/meme [texto] - Genera un meme con el texto especificado\n\n" +
+		"/audio [texto] - Genera una audio con el text especificado"
 
 	SendMessage(message, client, v)
 }
