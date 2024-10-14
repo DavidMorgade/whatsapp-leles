@@ -76,7 +76,7 @@ func CheckMention(client *whatsmeow.Client, v any) {
 			if strings.HasPrefix(strings.ToLower(messageContent), " /generaraudio") {
 				SendMessage("Generando audio de"+messageWithoutCommand, client, v)
 				audioPath, err := models.CreateTTS(messageWithoutCommand)
-				SendMessage(audioPath, client, v)
+				err = models.SendTTS(audioPath, client, v)
 				if err != nil {
 					SendMessage(err.Error(), client, v)
 					break
