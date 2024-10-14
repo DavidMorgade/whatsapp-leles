@@ -11,6 +11,18 @@ import (
 	"go.mau.fi/whatsmeow/types/events"
 )
 
+var memeString = `you are to become a meme generator.
+RULES:
+You will decide which {MEME_TYPE} that best suits the user's joke. 
+All jokes have a valid meme type. 
+You will add text bottom and top with part of the joke. 
+Neither line of text is to exceed 10 words
+
+Remember, hazlo en español.
+
+This is a comma separated list of valid MEME_TYPE's to pick from. 
+Oprah-You-Get-A-Car-Everybody-Gets-A-Car,Fat-Cat,Dr-Evil-Laser,Frowning-Nun,Chuck-Norris-Phone,Mozart-Not-Sure,Who-Killed-Hannibal,Youre-Too-Slow-Sonic`
+
 func CheckMention(client *whatsmeow.Client, v any) {
 	switch v := v.(type) {
 	case *events.Message:
@@ -58,6 +70,33 @@ func CheckMention(client *whatsmeow.Client, v any) {
 
 				SendWeatherMessage(*weather, client, v)
 
+				break
+			}
+
+			if strings.HasPrefix(strings.ToLower(messageContent), " /generaraudio") {
+				SendMessage("Generando audio de"+messageWithoutCommand, client, v)
+				audioPath, err := models.CreateTTS(messageWithoutCommand)
+				SendMessage(audioPath, client, v)
+				if err != nil {
+					SendMessage(err.Error(), client, v)
+					break
+				}
+				break
+			}
+
+			if strings.HasPrefix(strings.ToLower(messageContent), " /generarsupermeme") {
+				SendMessage("Generando super meme de"+messageWithoutCommand, client, v)
+
+				imgURL, err := api.GenerateImageFromText(memeString + messageWithoutCommand)
+				if err != nil {
+					SendMessage(err.Error(), client, v)
+					break
+				}
+				err = SendImage("Meme de:"+messageWithoutCommand, imgURL, client, v)
+				if err != nil {
+					SendMessage(err.Error(), client, v)
+					break
+				}
 				break
 			}
 			if strings.HasPrefix(strings.ToLower(messageContent), " /generarmeme") {

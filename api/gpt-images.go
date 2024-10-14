@@ -25,10 +25,10 @@ func init() {
 
 func GenerateImageFromText(prompt string) (string, error) {
 	// Ensure the prompt is no longer than 10 words
-	words := strings.Fields(prompt)
-	if len(words) > maxWords {
-		return "", errors.New("prompt exceeds 10 words")
-	}
+	// words := strings.Fields(prompt)
+	// if len(words) > maxWords {
+	// 	return "", errors.New("prompt exceeds 10 words")
+	// }
 
 	// Get the OpenAI API key from the environment
 	apiKey := os.Getenv("OPEN_AI_KEY")
