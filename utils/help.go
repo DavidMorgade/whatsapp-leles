@@ -18,7 +18,9 @@ func SendHelpCommands(client *whatsmeow.Client, v *events.Message) {
 		"/tiempo [ciudad] - Muestra el tiempo actual en la ciudad especificada\n\n" +
 		"/imagen [texto] - Genera una imagen de IA del promp especificado\n\n" +
 		"/meme [texto] - Genera un meme con el texto especificado\n\n" +
-		"/audio [texto] - Genera una audio con el text especificado"
+		"/audio [texto] - Genera una audio con el text especificadoz\n\n" +
+		"/ia [texto] - Genera un texto de IA con el prompt especificado\n\n" +
+		"Todos los comandos anteriores funcionan tambien mencionando un comentario + a mi nombre"
 
 	SendMessage(message, client, v)
 }

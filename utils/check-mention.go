@@ -49,6 +49,16 @@ func CheckMention(client *whatsmeow.Client, v any) {
 			DefaultHelpMessage(client, v)
 			break
 		}
+		// genera un text con un prompt a la ia
+		if strings.HasPrefix(strings.ToLower(messageContent), " /ia") {
+			SendMessage("Generando texto...", client, v)
+			text, err := api.GenerateAsistantTextFromPrompt(messageWithoutCommand)
+			if err != nil {
+				SendMessage(err.Error(), client, v)
+			}
+			SendMessage(text, client, v)
+			break
+		}
 		// Muestra los comandos disponibles
 		if strings.ToLower(messageContent) == " /ayuda" {
 			SendHelpCommands(client, v)
