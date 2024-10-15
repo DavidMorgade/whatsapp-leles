@@ -17,6 +17,7 @@ require (
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.19 // indirect
 	github.com/mdp/qrterminal v1.0.1 // indirect
+	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646 // indirect
 	github.com/rs/zerolog v1.33.0 // indirect
 	github.com/sashabaranov/go-openai v1.32.0 // indirect
 	go.mau.fi/libsignal v0.1.1 // indirect

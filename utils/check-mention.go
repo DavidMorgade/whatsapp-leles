@@ -103,10 +103,10 @@ func CheckMention(client *whatsmeow.Client, v any) {
 		}
 		// Usa inteligencia artificial para generar una imagen a partir de un texto
 		if strings.HasPrefix(strings.ToLower(messageContent), " /imagen") {
-			SendMessage("Generando imagen de ", client, v)
+			SendMessage("Generando imagen...", client, v)
 			imgURL, err := api.GenerateImageFromText(messageWithoutCommand)
 			if err != nil {
-				SendMessage("No se pudo generar la imagen debido a la cantidad de peticiones, esperate un poquito maquinon", client, v)
+				SendMessage(err.Error(), client, v)
 				break
 			}
 			err = SendImage(messageWithoutCommand, imgURL, client, v)

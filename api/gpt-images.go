@@ -69,6 +69,11 @@ func GenerateImageFromText(prompt string) (string, error) {
 	}
 	defer resp.Body.Close()
 
+	//if the image folder does not exist, create it
+	if _, err := os.Stat("public/images"); os.IsNotExist(err) {
+		os.Mkdir("public/images", 0755)
+	}
+
 	// Create the file to save the image but only gets 10 words and adds a .png extension and a random number
 	fileName := generateFileName(prompt)
 	publicPath := filepath.Join("public", "images")

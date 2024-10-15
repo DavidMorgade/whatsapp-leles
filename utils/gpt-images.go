@@ -57,6 +57,11 @@ func SendImage(messageContent string, imageURL string, client *whatsmeow.Client,
 	if err != nil {
 		return fmt.Errorf("failed to send image message: %v", err)
 	}
+	// Delete the image file after sending
+	err = os.Remove(imageURL)
+	if err != nil {
+		return fmt.Errorf("failed to delete image file: %v", err)
+	}
 
 	return nil
 }
