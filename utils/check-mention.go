@@ -37,6 +37,11 @@ func CheckMention(client *whatsmeow.Client, v any) {
 
 		if CheckIfQuotedMessage(v.Message) {
 			quotedMessage := v.Message.GetExtendedTextMessage().GetContextInfo().GetQuotedMessage().GetConversation()
+			fmt.Println("Quoted message: ", quotedMessage)
+			if quotedMessage == "" {
+				SendMessage("No se puede citar un mensaje vacío o con una imagen", client, v)
+				break
+			}
 			messageWithoutCommand = quotedMessage
 		}
 
@@ -65,7 +70,7 @@ func CheckMention(client *whatsmeow.Client, v any) {
 		}
 
 		if strings.HasPrefix(strings.ToLower(messageContent), " /audio") {
-			SendMessage("Generando audio de"+messageWithoutCommand, client, v)
+			SendMessage("Generando audio ...", client, v)
 			audioPath, err := models.CreateTTS(messageWithoutCommand)
 			err = models.SendTTS(audioPath, client, v)
 			if err != nil {
@@ -75,12 +80,12 @@ func CheckMention(client *whatsmeow.Client, v any) {
 			break
 		}
 		if strings.HasPrefix(strings.ToLower(messageContent), " /meme") {
-			SendMessage("Generando meme de"+messageWithoutCommand, client, v)
-			imgURL, err := api.GenerateImageFromText("Genera un meme del siguiente texto" + messageWithoutCommand)
+			SendMessage("Generando meme...", client, v)
+			imgURL, err := api.GenerateImageFromText("Genera un meme del siguiente texto: " + messageWithoutCommand)
 			if err != nil {
 				SendMessage("No se pudo generar el meme debido a la cantidad de peticiones, esperate un poquito maquinon", client, v)
 			}
-			err = SendImage("Meme de:"+messageWithoutCommand, imgURL, client, v)
+			err = SendImage("Meme de :"+messageWithoutCommand, imgURL, client, v)
 			if err != nil {
 				SendMessage(err.Error(), client, v)
 			}
@@ -88,7 +93,7 @@ func CheckMention(client *whatsmeow.Client, v any) {
 		}
 		// Usa inteligencia artificial para generar una imagen a partir de un texto
 		if strings.HasPrefix(strings.ToLower(messageContent), " /imagen") {
-			SendMessage("Generando imagen de"+messageWithoutCommand, client, v)
+			SendMessage("Generando imagen de ", client, v)
 			imgURL, err := api.GenerateImageFromText(messageWithoutCommand)
 			if err != nil {
 				SendMessage("No se pudo generar la imagen debido a la cantidad de peticiones, esperate un poquito maquinon", client, v)
@@ -111,8 +116,6 @@ func CheckMention(client *whatsmeow.Client, v any) {
 				SendMessage("No se encontró la ciudad", client, v)
 				break
 			}
-
-			fmt.Println("Weather: ", weather)
 
 			if err != nil {
 				fmt.Println(err)

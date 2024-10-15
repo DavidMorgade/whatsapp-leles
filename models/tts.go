@@ -88,7 +88,6 @@ func ConcatenateAudioFiles(files []string, output string) error {
 }
 
 func SendTTS(audioURL string, client *whatsmeow.Client, v *events.Message) error {
-	fmt.Println("Sending audio")
 
 	// Open the audio file
 	file, err := os.Open(audioURL)
@@ -119,14 +118,19 @@ func SendTTS(audioURL string, client *whatsmeow.Client, v *events.Message) error
 		FileSHA256:    resp.FileSHA256,
 	}
 
-	fmt.Println(*audioMsg.URL)
-
 	// Send the audio message
 	_, err = client.SendMessage(context.Background(), v.Info.Chat, &waE2E.Message{
 		AudioMessage: audioMsg,
 	})
 	if err != nil {
 		return fmt.Errorf("failed to send audio message: %v", err)
+	}
+
+	// delete the audio file
+	err = os.Remove(audioURL)
+
+	if err != nil {
+		return fmt.Errorf("failed to remove audio file: %v", err)
 	}
 
 	return nil

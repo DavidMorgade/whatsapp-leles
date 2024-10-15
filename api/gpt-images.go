@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"math/rand"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -43,11 +44,12 @@ func GenerateImageFromText(prompt string) (string, error) {
 	request := openai.ImageRequest{
 		Prompt: prompt,
 		N:      1,
-		Size:   "256x256", // You can adjust the size as needed
+		Size:   "512x512", // You can adjust the size as needed
 	}
 
 	// Send the request
 	response, err := client.CreateImage(context.Background(), request)
+
 	if err != nil {
 		return "", fmt.Errorf("failed to generate image: %v", err)
 	}
@@ -67,8 +69,8 @@ func GenerateImageFromText(prompt string) (string, error) {
 	}
 	defer resp.Body.Close()
 
-	// Create the file
-	fileName := strings.ReplaceAll(prompt, " ", "") + ".png"
+	// Create the file to save the image but only gets 10 words and adds a .png extension and a random number
+	fileName := generateFileName(prompt)
 	publicPath := filepath.Join("public", "images")
 
 	err = os.MkdirAll(publicPath, os.ModePerm)
@@ -91,4 +93,14 @@ func GenerateImageFromText(prompt string) (string, error) {
 
 	// Return the file path
 	return filePath, nil
+}
+func generateFileName(prompt string) string {
+
+	randomNumber := rand.Intn(1000) // Generate a random number between 0 and 999
+	shortPrompt := prompt
+	if len(prompt) > 10 {
+		shortPrompt = prompt[:10]
+	}
+	fileName := fmt.Sprintf("%d%s.png", randomNumber, strings.ReplaceAll(shortPrompt, " ", ""))
+	return fileName
 }
