@@ -49,6 +49,10 @@ func CheckMention(client *whatsmeow.Client, v any) {
 			DefaultHelpMessage(client, v)
 			break
 		}
+		if strings.HasPrefix(strings.ToLower(messageContent), " /crypto") {
+			api.GetCryptoPrice(messageWithoutCommand)
+			break
+		}
 		// genera un text con un prompt a la ia
 		if strings.HasPrefix(strings.ToLower(messageContent), " /ia") {
 			SendMessage("Generando texto...", client, v)
