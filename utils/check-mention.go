@@ -49,7 +49,7 @@ func CheckMention(client *whatsmeow.Client, v any) {
 			DefaultHelpMessage(client, v)
 			break
 		}
-		if strings.HasPrefix(strings.ToLower(messageContent), " /crypto") {
+		if strings.HasPrefix(strings.ToLower(messageContent), " /precio") {
 			cryptoInfo, err := api.GetCryptoPrice(messageWithoutCommand)
 			if err != nil {
 				SendMessage(err.Error(), client, v)

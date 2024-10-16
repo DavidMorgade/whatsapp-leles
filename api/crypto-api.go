@@ -2,64 +2,20 @@ package api
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"net/url"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/joho/godotenv"
 )
 
-type Quote struct {
-	EUR struct {
-		Price                 float64 `json:"price"`
-		Volume24h             float64 `json:"volume_24h"`
-		VolumeChange24h       float64 `json:"volume_change_24h"`
-		PercentChange1h       float64 `json:"percent_change_1h"`
-		PercentChange24h      float64 `json:"percent_change_24h"`
-		PercentChange7d       float64 `json:"percent_change_7d"`
-		PercentChange30d      float64 `json:"percent_change_30d"`
-		MarketCap             float64 `json:"market_cap"`
-		MarketCapDominance    float64 `json:"market_cap_dominance"`
-		FullyDilutedMarketCap float64 `json:"fully_diluted_market_cap"`
-		LastUpdated           string  `json:"last_updated"`
-	} `json:"EUR"`
-}
-
-type CryptoData struct {
-	ID                            int         `json:"id"`
-	Name                          string      `json:"name"`
-	Symbol                        string      `json:"symbol"`
-	Slug                          string      `json:"slug"`
-	IsActive                      int         `json:"is_active"`
-	IsFiat                        int         `json:"is_fiat"`
-	CirculatingSupply             float64     `json:"circulating_supply"`
-	TotalSupply                   float64     `json:"total_supply"`
-	MaxSupply                     float64     `json:"max_supply"`
-	DateAdded                     string      `json:"date_added"`
-	NumMarketPairs                int         `json:"num_market_pairs"`
-	CMCRank                       int         `json:"cmc_rank"`
-	LastUpdated                   string      `json:"last_updated"`
-	Tags                          []string    `json:"tags"`
-	Platform                      interface{} `json:"platform"`
-	SelfReportedCirculatingSupply interface{} `json:"self_reported_circulating_supply"`
-	SelfReportedMarketCap         interface{} `json:"self_reported_market_cap"`
-	Quote                         Quote       `json:"quote"`
-}
-
 type Response struct {
-	Data   map[string]CryptoData `json:"data"`
-	Status struct {
-		Timestamp    string `json:"timestamp"`
-		ErrorCode    int    `json:"error_code"`
-		ErrorMessage string `json:"error_message"`
-		Elapsed      int    `json:"elapsed"`
-		CreditCount  int    `json:"credit_count"`
-		Notice       string `json:"notice"`
-	} `json:"status"`
+	Data map[string]interface{} `json:"data"`
 }
 
 func init() {
@@ -71,12 +27,18 @@ func init() {
 }
 
 func GetCryptoPrice(crypto string) (string, error) {
+
+	crypto = strings.ReplaceAll(crypto, " ", "")
+
+	if crypto == "" {
+		return "", errors.New("No se ha especificado ninguna criptomoneda")
+	}
+
 	API_KEY := os.Getenv("COIN_API_KEY")
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", "https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest", nil)
 	if err != nil {
-		log.Print(err)
-		os.Exit(1)
+		return "", err
 	}
 
 	q := url.Values{}
@@ -97,19 +59,58 @@ func GetCryptoPrice(crypto string) (string, error) {
 	}
 	respBody, _ := io.ReadAll(resp.Body)
 
+	if resp.StatusCode != 200 {
+		return "", fmt.Errorf("No se encontró la criptomoneda %s", crypto)
+	}
+
 	var response Response
-	err = json.Unmarshal(respBody, &response)
+	err = json.Unmarshal([]byte(respBody), &response)
 
 	if err != nil {
 		return "", err
 	}
 
-	// Access the first (and only) element in the data field
-	for _, coin := range response.Data {
-		result := fmt.Sprintf("Symbol: %s, Name: %s, Price: %.8f EUR", coin.Symbol, coin.Name, coin.Quote.EUR.Price)
-		fmt.Println(result)
-		return result, nil
+	for _, data := range response.Data {
+		switch v := data.(type) {
+		case map[string]interface{}:
+			lastUpdated, err := convertDate(v["last_updated"].(string))
+			if err != nil {
+				return "", err
+			}
+			name := v["name"].(string)
+			symbol := v["symbol"].(string)
+			quote := v["quote"].(map[string]interface{})
+			eur := quote["EUR"].(map[string]interface{})
+			price := eur["price"].(float64)
+			return fmt.Sprintf("El precio de %s %s es de %.8f€, ultima actualizacion a %s", name, symbol, price, lastUpdated), nil
+		case []interface{}:
+			if len(v) > 0 {
+				lastUpdated, err := convertDate(v[0].(map[string]interface{})["last_updated"].(string))
+				if err != nil {
+					return "", err
+				}
+				name := v[0].(map[string]interface{})["name"].(string)
+				symbol := v[0].(map[string]interface{})["symbol"].(string)
+				coin := v[0].(map[string]interface{})
+				quote := coin["quote"].(map[string]interface{})
+				eur := quote["EUR"].(map[string]interface{})
+				price := eur["price"].(float64)
+				return fmt.Sprintf("El precio de %s %s es de %.8f€, ultima actualizacion a %s", name, symbol, price, lastUpdated), nil
+			}
+		}
 	}
 
-	return "Crypto not found", nil
+	return "No se encontró la criptomoneda", nil
+}
+
+func convertDate(input string) (string, error) {
+	// Parse the input date string
+	t, err := time.Parse(time.RFC3339, input)
+	if err != nil {
+		return "", err
+	}
+
+	// Format the date into the desired format
+	output := t.Format("02/01/2006 15:04:05")
+	return output, nil
 }

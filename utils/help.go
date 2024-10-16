@@ -20,6 +20,7 @@ func SendHelpCommands(client *whatsmeow.Client, v *events.Message) {
 		"/meme [texto] - Genera un meme con el texto especificado\n\n" +
 		"/audio [texto] - Genera una audio con el text especificadoz\n\n" +
 		"/ia [texto] - Genera un texto de IA con el prompt especificado\n\n" +
+		"/precio [criptomoneda] - Muestra el precio de la criptomoneda especificada\n\n" +
 		"Todos los comandos anteriores funcionan tambien mencionando un comentario + a mi nombre"
 
 	SendMessage(message, client, v)
