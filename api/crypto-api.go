@@ -9,56 +9,107 @@ import (
 	"net/url"
 	"os"
 	"strings"
+
+	"github.com/joho/godotenv"
 )
 
-type Response struct {
-	Data []struct {
-		Name  string `json:"name"`
-		Quote struct {
-			USD struct {
-				Price float64 `json:"price"`
-			} `json:"USD"`
-		} `json:"quote"`
-	} `json:"data"`
+type Quote struct {
+	EUR struct {
+		Price                 float64 `json:"price"`
+		Volume24h             float64 `json:"volume_24h"`
+		VolumeChange24h       float64 `json:"volume_change_24h"`
+		PercentChange1h       float64 `json:"percent_change_1h"`
+		PercentChange24h      float64 `json:"percent_change_24h"`
+		PercentChange7d       float64 `json:"percent_change_7d"`
+		PercentChange30d      float64 `json:"percent_change_30d"`
+		MarketCap             float64 `json:"market_cap"`
+		MarketCapDominance    float64 `json:"market_cap_dominance"`
+		FullyDilutedMarketCap float64 `json:"fully_diluted_market_cap"`
+		LastUpdated           string  `json:"last_updated"`
+	} `json:"EUR"`
 }
 
-func GetCryptoPrice(crypto string) {
+type CryptoData struct {
+	ID                            int         `json:"id"`
+	Name                          string      `json:"name"`
+	Symbol                        string      `json:"symbol"`
+	Slug                          string      `json:"slug"`
+	IsActive                      int         `json:"is_active"`
+	IsFiat                        int         `json:"is_fiat"`
+	CirculatingSupply             float64     `json:"circulating_supply"`
+	TotalSupply                   float64     `json:"total_supply"`
+	MaxSupply                     float64     `json:"max_supply"`
+	DateAdded                     string      `json:"date_added"`
+	NumMarketPairs                int         `json:"num_market_pairs"`
+	CMCRank                       int         `json:"cmc_rank"`
+	LastUpdated                   string      `json:"last_updated"`
+	Tags                          []string    `json:"tags"`
+	Platform                      interface{} `json:"platform"`
+	SelfReportedCirculatingSupply interface{} `json:"self_reported_circulating_supply"`
+	SelfReportedMarketCap         interface{} `json:"self_reported_market_cap"`
+	Quote                         Quote       `json:"quote"`
+}
+
+type Response struct {
+	Data   map[string]CryptoData `json:"data"`
+	Status struct {
+		Timestamp    string `json:"timestamp"`
+		ErrorCode    int    `json:"error_code"`
+		ErrorMessage string `json:"error_message"`
+		Elapsed      int    `json:"elapsed"`
+		CreditCount  int    `json:"credit_count"`
+		Notice       string `json:"notice"`
+	} `json:"status"`
+}
+
+func init() {
+	err := godotenv.Load()
+
+	if err != nil {
+		fmt.Println("Error loading .env file")
+	}
+}
+
+func GetCryptoPrice(crypto string) (string, error) {
+	API_KEY := os.Getenv("COIN_API_KEY")
 	client := &http.Client{}
-	req, err := http.NewRequest("GET", "https://sandbox-api.coinmarketcap.com/v1/cryptocurrency/listings/latest", nil)
+	req, err := http.NewRequest("GET", "https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest", nil)
 	if err != nil {
 		log.Print(err)
 		os.Exit(1)
 	}
 
 	q := url.Values{}
-	q.Add("start", "1")
-	q.Add("limit", "5000")
-	q.Add("convert", "USD")
+	q.Add("symbol", strings.ReplaceAll(strings.ToUpper(crypto), " ", ""))
+	if len(q.Get("symbol")) > 5 {
+		q.Del("symbol")
+		q.Add("slug", strings.ReplaceAll(strings.ToLower(crypto), " ", ""))
+	}
+	q.Add("convert", "EUR")
 
 	req.Header.Set("Accepts", "application/json")
-	req.Header.Add("X-CMC_PRO_API_KEY", "b54bcf4d-1bca-4e8e-9a24-22ff2c3d462c")
+	req.Header.Add("X-CMC_PRO_API_KEY", API_KEY)
 	req.URL.RawQuery = q.Encode()
 
 	resp, err := client.Do(req)
 	if err != nil {
-		fmt.Println("Error sending request to server")
-		os.Exit(1)
+		return "", err
 	}
 	respBody, _ := io.ReadAll(resp.Body)
 
 	var response Response
-	err = json.Unmarshal([]byte(respBody), &response)
+	err = json.Unmarshal(respBody, &response)
 
 	if err != nil {
-		log.Fatalf("Error parsing JSON: %v", err)
+		return "", err
 	}
 
+	// Access the first (and only) element in the data field
 	for _, coin := range response.Data {
-		if coin.Name == strings.ReplaceAll(crypto, " ", "") {
-			fmt.Printf("Name: %s, Price: %.8f USD\n", coin.Name, coin.Quote.USD.Price)
-			return
-		}
+		result := fmt.Sprintf("Symbol: %s, Name: %s, Price: %.8f EUR", coin.Symbol, coin.Name, coin.Quote.EUR.Price)
+		fmt.Println(result)
+		return result, nil
 	}
 
-	fmt.Printf("Cryptocurrency %s not found\n", crypto)
+	return "Crypto not found", nil
 }

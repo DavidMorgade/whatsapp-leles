@@ -45,10 +45,6 @@ func GenerateAsistantTextFromPrompt(prompt string) (string, error) {
 		return "", err
 	}
 	assistantID := os.Getenv("ASSISTANT_ID")
-	fmt.Println("assistantID: ", assistantID)
-	if err != nil {
-		return "", err
-	}
 
 	run, err := client.CreateRun(context.Background(), threadID, openai.RunRequest{
 		Model:       "gpt-4o-mini",
