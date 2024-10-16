@@ -67,6 +67,27 @@ func CheckMention(client *whatsmeow.Client, v any) {
 			SendMessage(text, client, v)
 			break
 		}
+		// humilla a la persona o echo que se menciona
+		if strings.HasPrefix(strings.ToLower(messageContent), " /humillar") {
+			SendMessage("Generando texto...", client, v)
+			text, err := api.GenerateAsistantTextFromPrompt("En esta respuesta debes humillar a la persona o echo que se menciona, utiliza todas los insultos que encuentres en el archivo de texto para hacerlo " + messageWithoutCommand)
+			if err != nil {
+				SendMessage(err.Error(), client, v)
+				break
+			}
+			SendMessage(text, client, v)
+			break
+		}
+		if strings.HasPrefix(strings.ToLower(messageContent), " /chiste") {
+			SendMessage("Generando texto...", client, v)
+			text, err := api.GenerateAsistantTextFromPrompt("Cuenta un chiste con las expresiones que usamos en el grupo, y si en el resto de este mensaje aparece algo mas que añadir al chiste añadelo " + messageWithoutCommand)
+			if err != nil {
+				SendMessage(err.Error(), client, v)
+				break
+			}
+			SendMessage(text, client, v)
+			break
+		}
 		// Muestra los comandos disponibles
 		if strings.ToLower(messageContent) == " /ayuda" {
 			SendHelpCommands(client, v)
@@ -101,7 +122,8 @@ func CheckMention(client *whatsmeow.Client, v any) {
 			SendMessage("Generando meme...", client, v)
 			imgURL, err := api.GenerateImageFromText("Genera un meme del siguiente texto: " + messageWithoutCommand)
 			if err != nil {
-				SendMessage("No se pudo generar el meme debido a la cantidad de peticiones, esperate un poquito maquinon", client, v)
+				SendMessage(err.Error(), client, v)
+				break
 			}
 			err = SendImage("Meme de :"+messageWithoutCommand, imgURL, client, v)
 			if err != nil {

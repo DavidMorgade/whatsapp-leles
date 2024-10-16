@@ -18,6 +18,7 @@ func SendImage(messageContent string, imageURL string, client *whatsmeow.Client,
 
 	// Open the image file
 	file, err := os.Open(imageURL)
+
 	if err != nil {
 		return fmt.Errorf("failed to open image file: %v", err)
 	}

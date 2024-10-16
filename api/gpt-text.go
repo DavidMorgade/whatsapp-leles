@@ -90,8 +90,6 @@ func GenerateAsistantTextFromPrompt(prompt string) (string, error) {
 
 	botSays := botMessage.Content[0].Text.Value
 
-	fmt.Println(botMessage.Content[0].Text)
-
 	return botSays, nil
 
 }
