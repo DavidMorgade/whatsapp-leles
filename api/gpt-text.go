@@ -22,16 +22,12 @@ func init() {
 	if apiKey == "" {
 		fmt.Println("OPEN_AI_KEY is not set in the environment")
 	}
-	assistantID := os.Getenv("ASSISTANT_ID")
-	if assistantID == "" {
-		fmt.Println("ASSISTANT_ID is not set in the environment")
-	}
 
 	client = openai.NewClient(apiKey)
 
 }
 
-func GenerateAsistantTextFromPrompt(prompt string) (string, error) {
+func GenerateAsistantTextFromPrompt(prompt string, assistantId string) (string, error) {
 	threadID, err := CreateThread()
 
 	// Creates a new conversation in the thread.
@@ -44,7 +40,7 @@ func GenerateAsistantTextFromPrompt(prompt string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	assistantID := os.Getenv("ASSISTANT_ID")
+	assistantID := os.Getenv(assistantId)
 
 	run, err := client.CreateRun(context.Background(), threadID, openai.RunRequest{
 		Model:       "gpt-4o-mini",

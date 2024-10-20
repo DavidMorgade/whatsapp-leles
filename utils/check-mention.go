@@ -51,23 +51,23 @@ func CheckMention(client *whatsmeow.Client, v any) {
 		}
 
 		// SOLO PARA PRUEBAS MANTENER COMENTADO////////////////////////
-		if strings.HasPrefix(strings.ToLower(messageContent), " /prueba") {
-			SendMessage("Generando imagen...", client, v)
-			imgURL, err := api.GenerateImageFromText(messageWithoutCommand)
-			if err != nil {
-				SendMessage(err.Error(), client, v)
-				break
-			}
-			err = SendImage(messageWithoutCommand, imgURL, client, v)
-			if err != nil {
-				SendMessage(err.Error(), client, v)
-				break
-			}
-			break
-		} else {
-			SendMessage("Mi gran amo y señor me tiene en modo mantenimiento, por favor espere a que termine de hacer pruebas", client, v)
-			break
-		}
+		// if strings.HasPrefix(strings.ToLower(messageContent), " /prueba") {
+		// 	SendMessage("Generando imagen...", client, v)
+		// 	imgURL, err := api.GenerateImageFromText(messageWithoutCommand)
+		// 	if err != nil {
+		// 		SendMessage(err.Error(), client, v)
+		// 		break
+		// 	}
+		// 	err = SendImage(messageWithoutCommand, imgURL, client, v)
+		// 	if err != nil {
+		// 		SendMessage(err.Error(), client, v)
+		// 		break
+		// 	}
+		// 	break
+		// } else {
+		// 	SendMessage("Mi gran amo y señor me tiene en modo mantenimiento, por favor espere a que termine de hacer pruebas", client, v)
+		// 	break
+		// }
 		///////////////////////////SOLO PARA PRUEBAS MANTENER COMENTADO////////////////////////
 		if strings.HasPrefix(strings.ToLower(messageContent), " /precio") {
 			cryptoInfo, err := api.GetCryptoPrice(messageWithoutCommand)
@@ -77,10 +77,32 @@ func CheckMention(client *whatsmeow.Client, v any) {
 			SendMessage(cryptoInfo, client, v)
 			break
 		}
+		// ASISTENTS personalizados
+		if strings.HasPrefix(strings.ToLower(messageContent), " /toti") {
+			SendMessage("Bot toti escribiendo...", client, v)
+			text, err := api.GenerateAsistantTextFromPrompt(messageWithoutCommand, "ASSISTANT_TOTI")
+			if err != nil {
+				SendMessage(err.Error(), client, v)
+				break
+			}
+			SendMessage(text, client, v)
+			break
+		}
+
+		if strings.HasPrefix(strings.ToLower(messageContent), " /jayn") {
+			SendMessage("Bot jayn escribiendo...", client, v)
+			text, err := api.GenerateAsistantTextFromPrompt(messageWithoutCommand, "ASSISTANT_JAYN")
+			if err != nil {
+				SendMessage(err.Error(), client, v)
+				break
+			}
+			SendMessage(text, client, v)
+			break
+		}
 		// genera un text con un prompt a la ia
 		if strings.HasPrefix(strings.ToLower(messageContent), " /ia") {
 			SendMessage("Generando texto...", client, v)
-			text, err := api.GenerateAsistantTextFromPrompt(messageWithoutCommand)
+			text, err := api.GenerateAsistantTextFromPrompt(messageWithoutCommand, "ASSISTANT_LELE")
 			if err != nil {
 				SendMessage(err.Error(), client, v)
 			}
@@ -90,7 +112,17 @@ func CheckMention(client *whatsmeow.Client, v any) {
 		// humilla a la persona o echo que se menciona
 		if strings.HasPrefix(strings.ToLower(messageContent), " /humillar") {
 			SendMessage("Generando texto...", client, v)
-			text, err := api.GenerateAsistantTextFromPrompt("En esta respuesta debes humillar a la persona o echo que se menciona, utiliza todas los insultos que encuentres en el archivo de texto para hacerlo " + messageWithoutCommand)
+			text, err := api.GenerateAsistantTextFromPrompt("En esta respuesta debes humillar a la persona o echo que se menciona, utiliza todas los insultos que encuentres en el archivo de texto para hacerlo "+messageWithoutCommand, "ASSISTANT_LELE")
+			if err != nil {
+				SendMessage(err.Error(), client, v)
+				break
+			}
+			SendMessage(text, client, v)
+			break
+		}
+		if strings.HasPrefix(strings.ToLower(messageContent), " /alabar") {
+			SendMessage("Generando texto...", client, v)
+			text, err := api.GenerateAsistantTextFromPrompt("En esta respuesta debes alabar a la persona o echo que se menciona, utiliza todas las palabras posibles que encuentres en el archivo de texto para hacerlo "+messageWithoutCommand, "ASSISTANT_LELE")
 			if err != nil {
 				SendMessage(err.Error(), client, v)
 				break
@@ -100,7 +132,7 @@ func CheckMention(client *whatsmeow.Client, v any) {
 		}
 		if strings.HasPrefix(strings.ToLower(messageContent), " /chiste") {
 			SendMessage("Generando texto...", client, v)
-			text, err := api.GenerateAsistantTextFromPrompt("Cuenta un chiste con las expresiones que usamos en el grupo, y si en el resto de este mensaje aparece algo mas que añadir al chiste añadelo " + messageWithoutCommand)
+			text, err := api.GenerateAsistantTextFromPrompt("Cuenta un chiste con las expresiones que usamos en el grupo, y si en el resto de este mensaje aparece algo mas que añadir al chiste añadelo "+messageWithoutCommand, "ASSISTANT_LELE")
 			if err != nil {
 				SendMessage(err.Error(), client, v)
 				break
@@ -111,6 +143,10 @@ func CheckMention(client *whatsmeow.Client, v any) {
 		// Muestra los comandos disponibles
 		if strings.ToLower(messageContent) == " /ayuda" {
 			SendHelpCommands(client, v)
+			break
+		}
+		if strings.ToLower(messageContent) == " /version" {
+			SendVersionMessage(client, v)
 			break
 		}
 
