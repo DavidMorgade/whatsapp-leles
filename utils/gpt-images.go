@@ -46,7 +46,6 @@ func SendImage(messageContent string, imageURL string, client *whatsmeow.Client,
 		MediaKey:      resp.MediaKey,
 		FileEncSHA256: resp.FileEncSHA256,
 		FileSHA256:    resp.FileSHA256,
-		JPEGThumbnail: imageData, // Thumbnail can be the same as the image for testing
 	}
 
 	fmt.Println(*imageMsg.URL)

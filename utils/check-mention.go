@@ -49,6 +49,26 @@ func CheckMention(client *whatsmeow.Client, v any) {
 			DefaultHelpMessage(client, v)
 			break
 		}
+
+		// SOLO PARA PRUEBAS MANTENER COMENTADO////////////////////////
+		if strings.HasPrefix(strings.ToLower(messageContent), " /prueba") {
+			SendMessage("Generando imagen...", client, v)
+			imgURL, err := api.GenerateImageFromText(messageWithoutCommand)
+			if err != nil {
+				SendMessage(err.Error(), client, v)
+				break
+			}
+			err = SendImage(messageWithoutCommand, imgURL, client, v)
+			if err != nil {
+				SendMessage(err.Error(), client, v)
+				break
+			}
+			break
+		} else {
+			SendMessage("Mi gran amo y señor me tiene en modo mantenimiento, por favor espere a que termine de hacer pruebas", client, v)
+			break
+		}
+		///////////////////////////SOLO PARA PRUEBAS MANTENER COMENTADO////////////////////////
 		if strings.HasPrefix(strings.ToLower(messageContent), " /precio") {
 			cryptoInfo, err := api.GetCryptoPrice(messageWithoutCommand)
 			if err != nil {

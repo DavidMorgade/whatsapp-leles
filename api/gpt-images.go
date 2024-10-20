@@ -42,9 +42,10 @@ func GenerateImageFromText(prompt string) (string, error) {
 
 	// Create the request payload
 	request := openai.ImageRequest{
-		Prompt: prompt,
+		Model:  "dall-e-3",
+		Prompt: "Crea una imagen clara y precisa, que sea realista y se vean todos los detalles de " + prompt + " que pase tu safety check",
 		N:      1,
-		Size:   "512x512", // You can adjust the size as needed
+		Size:   "1024x1024", // You can adjust the size as needed
 	}
 
 	// Send the request
