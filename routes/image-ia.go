@@ -27,7 +27,7 @@ func CheckImage(client *whatsmeow.Client, v *events.Message, messageContent stri
 		return true
 	}
 	// Usa inteligencia artificial para generar una imagen a partir de un texto
-	if strings.HasPrefix(parsedRoute, " /ia") {
+	if strings.HasPrefix(parsedRoute, " /imagen") {
 		utils.SendMessage("Generando imagen...", client, v)
 		imgURL, err := api.GenerateImageFromText(messageWithoutCommand)
 		if err != nil {

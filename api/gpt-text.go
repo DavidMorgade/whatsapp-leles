@@ -68,7 +68,7 @@ func GenerateAsistantTextFromPrompt(prompt string, assistantId string) (string, 
 		case openai.RunStatusRequiresAction:
 			return "", fmt.Errorf("run requires action")
 		default:
-			return "", fmt.Errorf("unknown run status")
+			return "", fmt.Errorf("Error al generar mensaje, prueba de nuevo")
 
 		}
 	}

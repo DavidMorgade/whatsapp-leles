@@ -6,10 +6,10 @@ import (
 )
 
 func RegisterRoutes(client *whatsmeow.Client, v *events.Message, messageContent string, messageWithoutCommand string) bool {
-	//ruta solo para pruebas debe estar arriba de las demas
-	if CheckTest(client, v, messageContent) {
-		return true
-	}
+	// //ruta solo para pruebas debe estar arriba de las demas
+	// if CheckTest(client, v, messageContent) {
+	// 	return true
+	// }
 	// ASSISTANT ROUTES
 	if CheckAssistantMention(client, v, messageContent, messageWithoutCommand) {
 		return true
@@ -26,13 +26,7 @@ func RegisterRoutes(client *whatsmeow.Client, v *events.Message, messageContent 
 	if CheckImage(client, v, messageContent, messageWithoutCommand) {
 		return true
 	}
-	if CheckImage(client, v, messageContent, messageWithoutCommand) {
-		return true
-	}
 	// HELP ROUTES
-	if CheckHelp(client, v, messageContent) {
-		return true
-	}
 	if CheckHelp(client, v, messageContent) {
 		return true
 	}
