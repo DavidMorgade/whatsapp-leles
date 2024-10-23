@@ -31,7 +31,7 @@ func SendHelpCommands(client *whatsmeow.Client, v *events.Message) {
 }
 
 func SendVersionMessage(client *whatsmeow.Client, v *events.Message) {
-	message := " Ultima actualizacion: Versión 0.2.0\n\n" +
+	message := " Ultima actualizacion: Versión 0.2.1\n\n" +
 		"Añadido comando /manu para interactuar con tus coleguita\n" +
 		"Añadido comando /maria la nueva integrante para animar el grupo \n"
 	SendMessage(message, client, v)
