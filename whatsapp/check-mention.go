@@ -30,7 +30,6 @@ func CheckMention(client *whatsmeow.Client, v any) {
 		botID := client.Store.ID.User
 
 		if !utils.CheckBotMention(message, botID) {
-			fmt.Println("No se mencionó al bot")
 			break
 		}
 
