@@ -1,13 +1,15 @@
 package main
 
 import (
-	_ "github.com/mattn/go-sqlite3"
-	"github.com/whatsapp-leles/db"
-	"github.com/whatsapp-leles/utils"
-	"go.mau.fi/whatsmeow"
 	"os"
 	"os/signal"
 	"syscall"
+
+	_ "github.com/mattn/go-sqlite3"
+	"github.com/whatsapp-leles/db"
+	"github.com/whatsapp-leles/utils"
+	"github.com/whatsapp-leles/whatsapp"
+	"go.mau.fi/whatsmeow"
 )
 
 func main() {
@@ -32,6 +34,6 @@ func main() {
 func GetEventHandler(client *whatsmeow.Client) func(interface{}) {
 
 	return func(evt interface{}) {
-		utils.CheckMention(client, evt)
+		whatsapp.CheckMention(client, evt)
 	}
 }
