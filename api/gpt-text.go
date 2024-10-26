@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/joho/godotenv"
 	"github.com/sashabaranov/go-openai"
@@ -51,6 +52,7 @@ func GenerateAsistantTextFromPrompt(prompt string, assistantId string) (string, 
 		return "", err
 	}
 	done := false
+	tryes := 0
 	for !done {
 		resp, err := client.RetrieveRun(context.Background(), run.ThreadID, run.ID)
 		if err != nil {
@@ -68,8 +70,11 @@ func GenerateAsistantTextFromPrompt(prompt string, assistantId string) (string, 
 		case openai.RunStatusRequiresAction:
 			return "", fmt.Errorf("run requires action")
 		default:
-			return "", fmt.Errorf("Error al generar mensaje, prueba de nuevo")
-
+			time.Sleep(2 * time.Second)
+			tryes++
+			if tryes >= 3 {
+				return "", fmt.Errorf("Error generando mensaje")
+			}
 		}
 	}
 

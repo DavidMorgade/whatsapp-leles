@@ -7,9 +7,12 @@ import (
 
 func RegisterRoutes(client *whatsmeow.Client, v *events.Message, messageContent string, messageWithoutCommand string) bool {
 	// //ruta solo para pruebas debe estar arriba de las demas
-	// if CheckTest(client, v, messageContent) {
-	// 	return true
-	// }
+	if CheckRegularIAMention(client, v, messageContent, messageWithoutCommand) {
+		return true
+	}
+	if CheckTest(client, v, messageContent) {
+		return true
+	}
 	// ASSISTANT ROUTES
 	if CheckAssistantMention(client, v, messageContent, messageWithoutCommand) {
 		return true
