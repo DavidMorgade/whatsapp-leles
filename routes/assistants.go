@@ -33,6 +33,16 @@ func CheckAssistantMention(client *whatsmeow.Client, v *events.Message, messageC
 		utils.SendMessage(text, client, v)
 		return true
 	}
+	if strings.HasPrefix(strings.ToLower(messageContent), " /roxas") {
+		utils.SendMessage("Bot Roxas escribiendo...", client, v)
+		text, err := api.GenerateAsistantTextFromPrompt(messageWithoutCommand, "ASSISTANT_ROXA")
+		if err != nil {
+			utils.SendMessage(err.Error(), client, v)
+			return true
+		}
+		utils.SendMessage(text, client, v)
+		return true
+	}
 
 	if strings.HasPrefix(strings.ToLower(messageContent), " /maria") {
 		utils.SendMessage("María escribiendo...", client, v)

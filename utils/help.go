@@ -22,7 +22,7 @@ func SendHelpCommands(client *whatsmeow.Client, v *events.Message) {
 		"/ia [texto] - Genera un texto de IA con el prompt especificado\n" +
 		"/humillar [texto] - Pongo a parir a la persona que me digas\n" +
 		"/alabar [texto] - Alabo a la persona que me digas\n" +
-		"/toti - Habla con Toti /jayn - Habla con jayn\n" +
+		"/nombredeusuario [texto] - GPT personalizado del usuario con el texto especificado\n" +
 		"/chiste [texto] - Cuenta un chiste con el texto especificado\n" +
 		"/precio [criptomoneda] - Muestra el precio de la criptomoneda especificada\n\n" +
 		"Todos los comandos anteriores funcionan tambien mencionando un comentario + a mi nombre"
